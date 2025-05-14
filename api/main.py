@@ -29,7 +29,7 @@ cloudinary.config(
 
 # --- Get base directory of this script (main.py) ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-print("Base Directory : ",BASE_DIR )
+# print("Base Directory : ",BASE_DIR )
 
 
 app = FastAPI()
@@ -168,3 +168,9 @@ async def early_blight_solution(request: Request):
 async def late_blight_solution(request: Request):
     return templates.TemplateResponse("late_blight.html", {"request": request})
 
+
+# Uvicorn entry point
+if __name__ == "__main__":
+    import uvicorn
+    # uvicorn.run("main:app", host="0.0.0.0", port=10000)
+    uvicorn.run("main:app", host="127.0.0.1", port=10000)
