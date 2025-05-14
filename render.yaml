@@ -1,9 +1,25 @@
+# services:
+#   - type: web
+#     name: potato-disease-detector
+#     env: python
+#     buildCommand: ""
+#     startCommand: "uvicorn api.main:app --host 0.0.0.0 --port 10000"
+#     envVars:
+#       - key: ENV
+#         value: production
+
 services:
   - type: web
     name: potato-disease-detector
-    env: python
-    buildCommand: ""
-    startCommand: "uvicorn api.main:app --host 0.0.0.0 --port 10000"
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host=0.0.0.0 --port=$PORT
+    workingDir: api
     envVars:
-      - key: ENV
-        value: production
+      - key: CLOUDINARY_CLOUD_NAME
+        value: dzqc3ofpv
+      - key: CLOUDINARY_API_KEY
+        value: 838817117177746
+      - key: CLOUDINARY_API_SECRET
+        value: ZvHWi2Ju43i_AZfH5-R6OZ8N7M0
+
