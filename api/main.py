@@ -172,5 +172,5 @@ async def late_blight_solution(request: Request):
 # Uvicorn entry point
 if __name__ == "__main__":
     import uvicorn
-    # uvicorn.run("main:app", host="0.0.0.0", port=10000)
-    uvicorn.run("main:app", host="127.0.0.1", port=10000)
+    uvicorn.run("main:app", host="0.0.0.0", port=10000)
+    # uvicorn.run("main:app", host="127.0.0.1", port=10000)
