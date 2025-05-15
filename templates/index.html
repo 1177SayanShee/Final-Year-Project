@@ -22,7 +22,7 @@
     <div id="uploadCard" class="glass-card cal-sans-regular">
         <h2>UPLOAD IMAGE</h2>
         <form action="/predict" method="post" enctype="multipart/form-data">
-            
+
             <div class="custom-upload mb-3 text-center">
                 <label for="uploadImage" class="custom-upload-btn">📁 Choose Image</label>
                 <input type="file" id="uploadImage" name="file" accept="image/*" required
@@ -105,46 +105,99 @@
         cameraImageInput.value = imageData;
     }
 
-    async function showCamera() {
-        document.getElementById('uploadCard').style.display = 'none';
-        document.getElementById('cameraCard').style.display = 'block';
+    // async function showCamera() {
+    //     document.getElementById('uploadCard').style.display = 'none';
+    //     document.getElementById('cameraCard').style.display = 'block';
 
+    //     try {
+    //         // stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    //         stream = await navigator.mediaDevices.getUserMedia({
+    //             video: { facingMode: { exact: "environment" } }
+    //         });
+
+    //         document.getElementById('cameraFeed').srcObject = stream;
+    //     } catch (error) {
+    //         console.error('Error accessing webcam:', error);
+    //         alert('Camera access denied. Switching to upload mode.');
+
+    //         // ✅ Automatically switch to Upload mode
+    //         document.getElementById('cameraCard').style.display = 'none';
+    //         document.getElementById('uploadCard').style.display = 'block';
+
+    //         // Update the radio button state to reflect upload mode
+    //         document.getElementById('upload').checked = true;  // Make upload mode active
+    //         document.getElementById('camera').checked = false; // Deactivate camera mode
+
+
+
+    //         // If you have a showUpload() function to handle logic, call it
+    //         if (typeof showUpload === 'function') {
+    //             showUpload();
+    //         }
+
+    //         // Reset the camera form if camera is unavailable
+    //         resetCameraForm();
+
+    //         return; // Exit early since camera is unavailable
+    //     }
+
+    //     const preview = document.getElementById('preview');
+    //     preview.style.display = 'none';
+    //     preview.src = '#';
+    //     document.getElementById('result').innerText = '';
+
+    //     // Reset the camera form if camera is unavailable
+    //     resetCameraForm();
+    // }
+
+    async function showCamera() {
+    document.getElementById('uploadCard').style.display = 'none';
+    document.getElementById('cameraCard').style.display = 'block';
+
+    const constraints = {
+        video: {
+            facingMode: { exact: "environment" }
+        }
+    };
+
+    try {
+        // Try to get the back camera
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+    } catch (err) {
+        console.warn("Back camera not found or access denied. Trying front camera...");
+
+        // Fallback to front camera if back is not available
         try {
-            stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            document.getElementById('cameraFeed').srcObject = stream;
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "user"
+                }
+            });
         } catch (error) {
-            console.error('Error accessing webcam:', error);
+            console.error("No camera access:", error);
             alert('Camera access denied. Switching to upload mode.');
 
-            // ✅ Automatically switch to Upload mode
             document.getElementById('cameraCard').style.display = 'none';
             document.getElementById('uploadCard').style.display = 'block';
+            document.getElementById('upload').checked = true;
+            document.getElementById('camera').checked = false;
 
-            // Update the radio button state to reflect upload mode
-            document.getElementById('upload').checked = true;  // Make upload mode active
-            document.getElementById('camera').checked = false; // Deactivate camera mode
-
-
-
-            // If you have a showUpload() function to handle logic, call it
-            if (typeof showUpload === 'function') {
-                showUpload();
-            }
-
-            // Reset the camera form if camera is unavailable
+            showUpload();
             resetCameraForm();
-
-            return; // Exit early since camera is unavailable
+            return;
         }
-
-        const preview = document.getElementById('preview');
-        preview.style.display = 'none';
-        preview.src = '#';
-        document.getElementById('result').innerText = '';
-
-        // Reset the camera form if camera is unavailable
-        resetCameraForm();
     }
+
+    document.getElementById('cameraFeed').srcObject = stream;
+
+    const preview = document.getElementById('preview');
+    preview.style.display = 'none';
+    preview.src = '#';
+    document.getElementById('result').innerText = '';
+
+    resetCameraForm();
+}
+
 
     function previewUploadImage() {
         const fileInput = document.getElementById('uploadImage');
@@ -237,14 +290,14 @@
     }
 
     // Add in your base.js or script tag
-window.addEventListener("scroll", () => {
-  const navbar = document.querySelector(".navbar");
-  if (window.scrollY > 50) {
-    navbar.classList.add("navbar-shrink");
-  } else {
-    navbar.classList.remove("navbar-shrink");
-  }
-});
+    window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".navbar");
+        if (window.scrollY > 50) {
+            navbar.classList.add("navbar-shrink");
+        } else {
+            navbar.classList.remove("navbar-shrink");
+        }
+    });
 
 
 </script>
