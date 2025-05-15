@@ -19,6 +19,9 @@ from fastapi import BackgroundTasks
 import time
 load_dotenv()  
 
+app = FastAPI()
+
+
 # Configure using your Cloudinary credentials
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -27,12 +30,14 @@ cloudinary.config(
     secure=True
 )
 
+
+
 # --- Get base directory of this script (main.py) ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# print("Base Directory : ",BASE_DIR )
+print("Base Directory i am printing : ",BASE_DIR )
 
 
-app = FastAPI()
+
 
 # CORS config (keep if using frontend separately)
 origins = ["http://localhost", "http://localhost:3000"]
@@ -46,7 +51,10 @@ app.add_middleware(
 
 # Load model
 # MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "models", "3"))
-MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "potatoes.h5"))
+# MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "potatoes.h5"))
+MODEL_PATH = os.path.join(BASE_DIR, "potatoes.h5")
+print("Model Path : ", MODEL_PATH)
+
 
 
 
@@ -56,9 +64,18 @@ CLASS_NAMES = ["Early Blight", "Late Blight", "Healthy"]
 
 
 STATIC_DIR = os.path.join(BASE_DIR, "static")
+print("Statis Path : ", STATIC_DIR)
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+print("Template Path : ", TEMPLATES_DIR)
+
+
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
+
+print("Files in base directory:", os.listdir(BASE_DIR))
+print("Model file exists:", os.path.exists(MODEL_PATH))
+print("Static directory exists:", os.path.exists(STATIC_DIR))
+print("Templates directory exists:", os.path.exists(TEMPLATES_DIR))
 
 
 # Image read helper
@@ -177,6 +194,11 @@ async def late_blight_solution(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 10000))  # fallback to 10000 for local dev
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+    # port = int(os.environ.get("PORT", 10000))  # fallback to 10000 for local dev
+    # uvicorn.run("main:app", host="127.0.0.1", port=port)
+    # uvicorn.run("main:app", host="127.0.0.1", port=8000)
+
+    # uvicorn.run("main:app", host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
 
